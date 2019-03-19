@@ -1,0 +1,8 @@
+.bg {
+  width: calc(100% - 20px);
+  height: 250px;
+  background-color: #47618a;
+  padding: 10px;
+  text-align: center;
+  color: white;
+}
