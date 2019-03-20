@@ -1,0 +1,35 @@
+.resourcesBg {
+  width: 100%;
+  height: auto;
+  background-color: #112a48;
+  position: relative;
+}
+
+.resourceContainer {
+  overflow: auto;
+  width: 100%;
+}
+
+.resourceContainer a {
+  color: black;
+  text-decoration: none;
+  margin: 20px auto;
+  display: table;
+}
+
+.resource {
+  width: 110px;
+  text-align: center;
+  padding: 10px;
+  border: 1px solid #cecece;
+  background-color: white;
+}
+
+.resource p {
+  font-size: 23px;
+}
+
+.resource i {
+  float: left;
+  font-size: 27px;
+}

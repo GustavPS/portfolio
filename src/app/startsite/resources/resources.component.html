@@ -1,0 +1,10 @@
+<div class="resourcesBg">
+  <div class="resourceContainer">
+    <a *ngFor="let resource of resources" href="{{resource['link']}}" target="_blank">
+      <div class="resource">
+        <i class="{{resource['icon']}}"></i>
+        <p>{{resource["name"]}}</p>
+      </div>
+    </a>
+  </div>
+</div>
