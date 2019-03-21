@@ -8,7 +8,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var Server = /** @class */ (function () {
     function Server(port) {
-        this.gitHubHandler = new GitHubHandler_1.GitHubHandler("gustavps", "faed51ff4f72fa528f10145e31e3541e21b7f5ec");
+        this.gitHubHandler = new GitHubHandler_1.GitHubHandler();
         this.port = port;
     }
     Server.prototype.setupSocket = function () {

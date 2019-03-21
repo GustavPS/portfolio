@@ -9,9 +9,9 @@ export class GitHubHandler {
   private readonly host: string;
   private readonly headers: {};
 
-  constructor(username: string, oAuth: string) {
-    this.username = username;
-    this.oAuth = oAuth;
+  constructor() {
+    this.username = "gustavps";
+    this.oAuth = "b66909f1867210555df9baf62393af70cdac57fb";
     this.host = "api.github.com";
     this.headers = { 'User-Agent': 'Mozilla/5.0' };
   }
@@ -57,22 +57,20 @@ export class GitHubHandler {
   public updateRepoDatabase(): void {
     Logger.Debug("Updating GitHub repos...");
     this.getRepos((repos) => {
-      for(let repo of repos) {
-        this.getReadme(repo["readme"], (readme) => {
-          SqlHandler.getConnection((connection) => {
-            connection.query(
-              "INSERT INTO Projects (title, original_content, custom_content, image, link, type) " +
-              "SELECT ?, ?, ?, ?, ?, ? " +
-              "WHERE NOT EXISTS (SELECT id FROM Projects WHERE title = ?)",
-              [repo["name"], readme, readme, "", repo["html_url"], "GitHub", repo["name"]],
-              (err) => {
-                if (err) throw err;
-                connection.release();
-              });
+      SqlHandler.getConnection((connection) => {
+        for(let repo of repos) {
+          this.getReadme(repo["name"], (readme) => {
+            connection.query
+            (
+              "INSERT INTO Projects (title, original_content, custom_content, link, type)" +
+              "VALUES (?,?,?,?,?) ON DUPLICATE KEY UPDATE original_content=?",
+              [repo["name"], readme, readme, repo["html_url"], "GitHub", readme]
+            );
           });
-        });
-      }
-      Logger.Debug("Done updating GitHub repos.");
+        }
+        Logger.Debug("Done updating GitHub repos.");
+        connection.release();
+      });
     });
   }
 }

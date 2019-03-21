@@ -11,7 +11,7 @@ export class Server {
   private gitHubHandler: GitHubHandler;
 
   constructor(port: number) {
-    this.gitHubHandler = new GitHubHandler("gustavps", "faed51ff4f72fa528f10145e31e3541e21b7f5ec");
+    this.gitHubHandler = new GitHubHandler();
     this.port = port;
   }
 
