@@ -9,7 +9,7 @@ export class AppComponent {
   title = 'Gustavs portfolio';
   nav_open: boolean = false;
 
-  openNav(): void {
+  toggleNav(): void {
     this.nav_open = !this.nav_open;
   }
 }

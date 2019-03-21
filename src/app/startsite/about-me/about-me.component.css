@@ -1,6 +1,6 @@
 .bg {
   width: calc(100% - 20px);
-  height: 250px;
+  height: 400px;
   background-image: url('https://c.pxhere.com/photos/e5/86/laptop_office_home_office_desk_workplace_computer_business_notebook-544885.jpg!d');
   background-size: cover;
   background-position: center;
@@ -10,5 +10,5 @@
 }
 p {
   font-size: 16px;
-  line-height: 25px;
+  line-height: 30px;
 }

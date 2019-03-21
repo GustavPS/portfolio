@@ -1,35 +1,71 @@
 import {SqlHandler} from './SqlHandler';
+import {GitHubHandler} from './GitHubHandler';
+import {Logger} from './Logger';
 
 const app = require('express')();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
-io.on('connection', (socket: any) => {
-  console.log('New connection');
+export class Server {
+  private readonly port: number;
+  private gitHubHandler: GitHubHandler;
 
-  socket.on("request-about-me", () => {
-    console.log("Socket: request-about-me");
-    SqlHandler.getConnection((connection) => {
-      connection.query("SELECT * FROM AboutMe", (err, result) => {
-        if(err) throw err;
+  constructor(port: number) {
+    this.gitHubHandler = new GitHubHandler("gustavps", "faed51ff4f72fa528f10145e31e3541e21b7f5ec");
+    this.port = port;
+  }
 
-        socket.emit("about-me", JSON.stringify(result[0]));
+  private setupSocket(): void {
+    io.on('connection', (socket: any) => {
+      Logger.Debug("New connection")
+
+      socket.on("request-about-me", () => {
+        Logger.Debug("Socket: request-about-me");
+        SqlHandler.getConnection((connection) => {
+          connection.query("SELECT * FROM AboutMe", (err, result) => {
+            if(err) throw err;
+
+            socket.emit("about-me", JSON.stringify(result[0]));
+            connection.release();
+          });
+        });
+      });
+
+      socket.on("request-resource-links", () => {
+        Logger.Debug("Socket: request-resource-links");
+        SqlHandler.getConnection((connection) => {
+          connection.query("SELECT name, link, icon FROM Resources", (err, result) => {
+            if(err) throw err;
+
+            socket.emit("resource-links", result);
+            connection.release();
+          });
+        });
+      });
+
+      socket.on("request-projects", (count: number) => {
+        SqlHandler.getConnection((connection) => {
+          connection.query("SELECT * FROM Projects LIMIT ?", [count], (err, result) => {
+            if(err) throw err;
+
+            socket.emit("projects", result);
+            connection.release();
+          });
+        });
       });
     });
-  });
 
-  socket.on("request-resource-links", () => {
-    console.log("Socket: request-resource-links");
-    SqlHandler.getConnection((connection) => {
-      connection.query("SELECT name, link, icon FROM Resources", (err, result) => {
-        if(err) throw err;
+  }
 
-        socket.emit("resource-links", result);
-      });
+  public startServer(): void {
+    this.updateProjects();
+    this.setupSocket();
+    http.listen(this.port, () => {
+      Logger.General("listening on *:3000");
     });
-  });
-});
+  }
 
-http.listen(3000, () => {
-  console.log("listening *:3000");
-});
+  private updateProjects(): void {
+    this.gitHubHandler.updateRepoDatabase();
+  }
+}

@@ -1,17 +1,18 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div id="container" [class.header_open]="nav_open === true">
-  <header>
-    <h1>Gustav P Svensson</h1>
-    <img (click)="openNav()" src="../../assets/images/menu.png" width="30" />
-    <nav [class.nav_open]="nav_open === true">
-      <ul>
-        <li routerLink="/">Hem</li>
-        <li routerLink="/projekt">Projekt</li>
-      </ul>
-    </nav>
-  </header>
+<div class="outerContainer">
+  <nav [class.nav_open]="nav_open === true" class="sideNav">
+    <ul>
+      <li routerLink="/">Hem</li>
+      <li routerLink="/projekt">Projekt</li>
+    </ul>
+  </nav>
 
+  <div class="innerContainer" [class.container_right]="nav_open === true">
+    <header>
+      <h1><span>Gustav P Svensson</span></h1>
+      <img (click)="toggleNav()" src="../../assets/images/menu.png" width="40" />
+    </header>
 
-
-  <router-outlet></router-outlet>
+    <router-outlet></router-outlet>
+  </div>
 </div>

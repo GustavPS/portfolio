@@ -12,6 +12,11 @@ export class StartsiteMainComponent implements OnInit {
 
   ngOnInit() {
     this.webSocket.connect();
+    this.webSocket.requestProjects(3);
+    this.webSocket.getProjects().subscribe(
+      data => {
+        console.log(data);
+      });
   }
 
 }

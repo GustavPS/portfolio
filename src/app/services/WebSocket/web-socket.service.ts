@@ -7,7 +7,7 @@ import {Observable} from 'rxjs';
   providedIn: 'root'
 })
 export class WebSocketService {
-  private url: string = "localhost:3000";
+  private url: string = "192.168.0.105:3000";
   private socket;
 
   constructor() { }
@@ -22,10 +22,14 @@ export class WebSocketService {
   requestResourceLinks(): void {
     this.socket.emit("request-resource-links");
   }
+  requestProjects(count: number): void {
+    this.socket.emit("request-projects", count);
+  }
 
   getAboutMe(): Observable<JSON> {
     return Observable.create((observer) => {
       this.socket.on('about-me', (data) => {
+        console.log("Got data");
         observer.next(JSON.parse(data));
       });
     });
@@ -33,6 +37,13 @@ export class WebSocketService {
   getResourceLinks(): Observable<Array<JSON>> {
     return Observable.create((observer) => {
       this.socket.on('resource-links', (data) => {
+        observer.next(data);
+      });
+    });
+  }
+  getProjects(): Observable<Array<JSON>> {
+    return Observable.create((observer) => {
+      this.socket.on('projects', (data) => {
         observer.next(data);
       });
     });
